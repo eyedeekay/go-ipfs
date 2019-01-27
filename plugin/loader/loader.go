@@ -100,6 +100,11 @@ func (loader *PluginLoader) Run() error {
 			if err != nil {
 				return err
 			}
+		case plugin.PluginGeneric:
+			err := runGenericPlugin(pl)
+			if err != nil {
+				return err
+			}
 		default:
 			panic(pl)
 		}
@@ -121,5 +126,13 @@ func runTracerPlugin(pl plugin.PluginTracer) error {
 		return err
 	}
 	opentracing.SetGlobalTracer(tracer)
+	return nil
+}
+
+func runGenericPlugin(pl plugin.PluginGeneric) error {
+	exists, err := pl.Exists()
+	if err != nil {
+		return err
+	}
 	return nil
 }
